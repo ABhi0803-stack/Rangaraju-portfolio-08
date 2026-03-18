@@ -1,0 +1,29 @@
+{
+  "name": "rangaraju-portfolio",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
+    "@react-three/postprocessing": "^2.15.12",
+    "framer-motion": "^11.0.3",
+    "gsap": "^3.12.4",
+    "lenis": "^1.0.42",
+    "lottie-react": "^2.4.1",
+    "postprocessing": "^6.35.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-intersection-observer": "^9.5.3",
+    "three": "^0.160.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.2.6"
+  }
+}

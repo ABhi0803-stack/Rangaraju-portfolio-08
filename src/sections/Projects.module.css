@@ -1,0 +1,200 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cardOuter { will-change: transform; }
+.cardOuter.wide { grid-column: span 2; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+
+  transition: 
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.3s ease;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(29,78,216,0.15), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+  border-color: var(--border2);
+}
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+.topLine {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.45s cubic-bezier(.23,1,.32,1);
+  border-radius: 8px 8px 0 0;
+}
+.card:hover .topLine { transform: scaleX(1); }
+
+/* shimmer */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(28,25,23,0.03), transparent);
+  pointer-events: none;
+  transition: left 0.65s ease;
+}
+.card:hover::before { left: 160%; }
+
+.num {
+  font-family: var(--font-m);
+  font-size: 10px; letter-spacing: 0.2em;
+  color: var(--muted2); margin-bottom: 18px;
+}
+
+.iconWrap {
+  width: 52px; height: 52px;
+  margin-bottom: 18px;
+  transition: transform 0.35s cubic-bezier(.23,1,.32,1);
+}
+.card:hover .iconWrap { transform: translateY(-3px) scale(1.05); }
+.iconWrap svg { width: 100%; height: 100%; }
+
+.title {
+  font-family: var(--font-h);
+  font-size: 20px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 10px;
+}
+.desc {
+  font-size: 13px; line-height: 1.7;
+  color: var(--muted); flex: 1;
+  margin-bottom: 18px;
+}
+
+.tags {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-bottom: 22px;
+}
+.tag {
+  font-family: var(--font-m);
+  font-size: 9.5px; letter-spacing: 0.06em;
+  padding: 3px 9px; border-radius: 3px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.card:hover .tag { border-color: var(--border2); color: var(--ink); }
+
+.link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-m);
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: auto; font-weight: 500;
+  transition: gap 0.25s;
+}
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .cardOuter.wide { grid-column: span 2; }
+}
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .cardOuter.wide { grid-column: span 1; }
+}
+
+.iconWrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  stroke: currentColor;
+  fill: none;
+
+  /* 🔥 makes icons visible */
+  opacity: 1;
+}
+
+/* 🔥 ICON GLOW */
+.card:hover .iconWrap svg {
+  filter: drop-shadow(0 0 10px rgba(29,78,216,0.4));
+  transform: scale(1.15) rotate(4deg);
+  transition: all 0.35s ease;
+}
+
+/* 🔥 TITLE GLOW */
+.card:hover .title {
+  color: var(--blue);
+  text-shadow: 0 0 12px rgba(29,78,216,0.25);
+}
+
+/* 🔥 CARD GLOW BORDER */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+
+  background: linear-gradient(120deg, transparent, rgba(29,78,216,0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+/* 🔥 TAG FLOAT */
+.card:hover .tag {
+  transform: translateY(-3px);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* 🔥 LINK ANIMATION */
+.link span {
+  position: relative;
+}
+
+.link span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.card:hover .link span::after {
+  width: 100%;
+}
