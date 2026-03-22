@@ -2,101 +2,74 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Loader({ onComplete }) {
-  const [count, setCount] = useState(0)
+  const [count,   setCount]   = useState(0)
   const [visible, setVisible] = useState(true)
-  const [wiping, setWiping] = useState(false)
+  const [wiping,  setWiping]  = useState(false)
 
   useEffect(() => {
     let c = 0
-
     const id = setInterval(() => {
-      c += Math.floor(Math.random() * 10) + 6
-
+      c += Math.floor(Math.random() * 14) + 5
       if (c >= 100) {
-        c = 100
-        clearInterval(id)
-
-        // start wipe animation
-        setTimeout(() => setWiping(true), 200)
-
-        // remove loader AFTER animation
-        setTimeout(() => {
-          setVisible(false)
-
-          // mount app AFTER loader gone
-          setTimeout(() => {
-            onComplete()
-          }, 150)
-        }, 1000)
+        c = 100; clearInterval(id)
+        setTimeout(() => setWiping(true), 300)
+        setTimeout(() => { onComplete(); setTimeout(() => setVisible(false), 100) }, 1150)
       }
-
       setCount(c)
-    }, 50)
-
+    }, 55)
     return () => clearInterval(id)
   }, [onComplete])
 
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          key="loader"
-          style={styles.wrap}
-          exit={{ opacity: 0, transition: { duration: 0.4 } }}
-        >
-          {/* background panels */}
-          <motion.div
-            style={{ ...styles.panel, background: '#F8F6F1', transformOrigin: 'left' }}
+        <motion.div key="loader" style={S.wrap}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}>
+
+          {/* Panel wipe left */}
+          <motion.div style={{ ...S.panel, background: '#F5F5F5', transformOrigin: 'left' }}
             animate={wiping ? { scaleX: 0 } : { scaleX: 1 }}
-            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-          />
-
-          <motion.div
-            style={{ ...styles.panel, background: '#EEF2FF', transformOrigin: 'right' }}
+            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }} />
+          {/* Panel wipe right */}
+          <motion.div style={{ ...S.panel, background: '#FFFFFF', transformOrigin: 'right' }}
             animate={wiping ? { scaleX: 0 } : { scaleX: 1 }}
-            transition={{ duration: 0.7, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
-          />
+            transition={{ duration: 0.7, delay: 0.07, ease: [0.76, 0, 0.24, 1] }} />
 
-          {/* content */}
-          <motion.div
-            style={styles.body}
-            initial={{ opacity: 0, y: 20 }}
-            animate={wiping ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* NAME (FIXED — no split bug) */}
-            <motion.div
-              style={styles.name}
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Rangaraju R
-            </motion.div>
+          <motion.div style={S.body}
+            animate={wiping ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}>
 
-            {/* PROGRESS BAR */}
-            <div style={styles.barWrap}>
-              <motion.div
-                style={styles.barFill}
-                animate={{ width: count + '%' }}
-                transition={{ ease: 'linear', duration: 0.05 }}
-              />
+            {/* Logo mark */}
+            <div style={S.logoRow}>
+              <div style={S.logoMark}>R</div>
+              <div style={S.logoText}>
+                <div style={S.logoName}>Rangaraju R</div>
+                <div style={S.logoRole}>QA Engineer · Full Stack Developer</div>
+              </div>
             </div>
 
-            {/* BOTTOM INFO */}
-            <div style={styles.bottom}>
-              <span style={styles.role}>
-                QA Engineer · Full Stack Developer
-              </span>
+            {/* Name letter reveal */}
+            <div style={S.nameRow}>
+              {['R','a','n','g','a','r','a','j','u',' ','R'].map((ch, i) => (
+                <motion.span key={i}
+                  style={{ ...S.letter, marginRight: ch === ' ' ? '0.2em' : 0 }}
+                  initial={{ y: '100%', opacity: 0 }}
+                  animate={{ y: '0%', opacity: 1 }}
+                  transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}>
+                  {ch}
+                </motion.span>
+              ))}
+            </div>
 
-              <motion.span
-                style={styles.pct}
-                key={count}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                {String(count).padStart(3, '0')}
-              </motion.span>
+            {/* Progress */}
+            <div style={S.barTrack}>
+              <motion.div style={S.barFill}
+                animate={{ width: count + '%' }}
+                transition={{ ease: 'linear', duration: 0.04 }} />
+            </div>
+            <div style={S.barRow}>
+              <span style={S.hint}>Loading portfolio...</span>
+              <span style={S.pct}>{count}%</span>
             </div>
           </motion.div>
         </motion.div>
@@ -105,76 +78,29 @@ export default function Loader({ onComplete }) {
   )
 }
 
-/* ================= STYLES ================= */
-
-const styles = {
-  wrap: {
-    position: 'fixed',
-    inset: 0,
-    zIndex: 9999,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
+const S = {
+  wrap: { position:'fixed', inset:0, zIndex:9000, display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden' },
+  panel: { position:'absolute', inset:0 },
+  body: { position:'relative', zIndex:1, width:'min(500px, 88vw)', display:'flex', flexDirection:'column', gap:24 },
+  logoRow: { display:'flex', alignItems:'center', gap:14 },
+  logoMark: {
+    width:48, height:48, borderRadius:8,
+    background:'#AE0600', color:'#fff',
+    display:'flex', alignItems:'center', justifyContent:'center',
+    fontFamily:"'Inter',sans-serif", fontSize:24, fontWeight:800, flexShrink:0,
   },
-
-  panel: {
-    position: 'absolute',
-    inset: 0,
+  logoText: { display:'flex', flexDirection:'column', gap:2 },
+  logoName: { fontFamily:"'Inter',sans-serif", fontSize:18, fontWeight:700, color:'#1A1A1A', letterSpacing:'-0.02em' },
+  logoRole: { fontFamily:"'JetBrains Mono',monospace", fontSize:10, letterSpacing:'0.14em', textTransform:'uppercase', color:'#8A8A9A' },
+  nameRow: {
+    display:'flex', flexWrap:'nowrap', overflow:'hidden',
+    fontFamily:"'Inter',sans-serif", fontSize:'clamp(36px,6vw,68px)',
+    fontWeight:800, letterSpacing:'-0.04em', color:'#1A1A1A', lineHeight:1,
   },
-
-  body: {
-    position: 'relative',
-    zIndex: 2,
-    width: 'min(520px, 88vw)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 24,
-    alignItems: 'center',
-  },
-
-  name: {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 'clamp(42px, 6vw, 72px)',
-    fontWeight: 800,
-    letterSpacing: '-0.04em',
-    color: '#18130F',
-    textAlign: 'center',
-  },
-
-  barWrap: {
-    width: '100%',
-    height: 3,
-    background: 'rgba(24,19,15,0.08)',
-    borderRadius: 2,
-    overflow: 'hidden',
-  },
-
-  barFill: {
-    height: '100%',
-    width: '0%',
-    background: 'linear-gradient(90deg, #1D4ED8, #059669)',
-  },
-
-  bottom: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  role: {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: 10,
-    letterSpacing: '0.18em',
-    textTransform: 'uppercase',
-    color: '#6B5E54',
-  },
-
-  pct: {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: 11,
-    letterSpacing: '0.2em',
-    color: '#1D4ED8',
-  },
+  letter: { display:'inline-block' },
+  barTrack: { height:3, background:'rgba(0,0,0,0.08)', borderRadius:2, overflow:'hidden' },
+  barFill: { height:'100%', width:'0%', background:'#AE0600', borderRadius:2 },
+  barRow: { display:'flex', justifyContent:'space-between', alignItems:'center' },
+  hint: { fontFamily:"'JetBrains Mono',monospace", fontSize:10, letterSpacing:'0.14em', textTransform:'uppercase', color:'#8A8A9A' },
+  pct:  { fontFamily:"'JetBrains Mono',monospace", fontSize:11, letterSpacing:'0.1em', color:'#AE0600', fontWeight:500 },
 }

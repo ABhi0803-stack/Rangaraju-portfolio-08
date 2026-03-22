@@ -1,200 +1,187 @@
-/* ── Hero ── */
+/* ── Hero wrapper ── */
 .hero {
   min-height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 72px 60px;
+  padding: 0 48px 56px;
   overflow: hidden;
+  background: var(--bg);
 }
 
-/* Proper gradient background — not plain white */
+/* ── Warm gradient base — no more blue/purple ── */
 .heroBg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 65% 40%, rgba(219,234,254,0.55) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 15% 70%, rgba(209,250,229,0.3) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(254,243,199,0.25) 0%, transparent 65%),
-    linear-gradient(160deg, #F8F6F1 0%, #EEF2FF 50%, #F0FDF4 100%);
+    radial-gradient(ellipse 75% 60% at 70% 30%, rgba(241,225,148,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 10% 80%, rgba(91,14,20,0.07) 0%, transparent 60%),
+    linear-gradient(170deg, #FFFEF5 0%, #F7F4E8 50%, #EDE9D6 100%);
   z-index: 0;
 }
 
-/* subtle dot grid */
-.hero::before {
-  content: '';
-  position: absolute; inset: 0; z-index: 1;
-  background-image: radial-gradient(circle, rgba(29,78,216,0.07) 1px, transparent 1px);
-  background-size: 36px 36px;
-  pointer-events: none;
-}
-
+/* ── Canvas for 3D — sits on top of bg ── */
 .canvas {
-  position: absolute; inset: 0; z-index: 2;
+  position: absolute; inset: 0;
+  z-index: 2;
   pointer-events: none;
   will-change: transform;
 }
 
-/* ── Badges — kept small & to sides ── */
-.badge {
+/* ── SVG Circuit board overlay ── */
+.circuitSvg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ── Status chips ── */
+.chip {
   position: absolute; z-index: 4;
   font-family: var(--font-m);
   font-size: 11px; font-weight: 400;
-  padding: 10px 14px; border-radius: 6px; border: 1px solid;
-  display: flex; align-items: center; gap: 8px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 2px 12px rgba(24,19,15,0.06);
-  white-space: nowrap;
-  /* keep below 280px wide */
-  max-width: 240px;
+  padding: 8px 13px;
+  border-radius: var(--r1);
+  border: 1px solid;
+  display: flex; align-items: center; gap: 7px;
+  backdrop-filter: blur(10px);
+  background: rgba(255,254,245,0.85);
+  box-shadow: var(--e2);
+  white-space: nowrap; max-width: 220px;
 }
-.bdot {
+.chipDot {
   width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
   animation: pulse 1.6s ease infinite;
 }
 
-/* ── Content ── */
-.content {
-  position: relative; z-index: 3;
-  will-change: transform;
-}
+/* ── Content layer ── */
+.content { position: relative; z-index: 3; will-change: transform; }
 
 .eyebrow {
   font-family: var(--font-m);
-  font-size: 10px; letter-spacing: .26em; text-transform: uppercase;
-  color: var(--blue);
+  font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--primary);
   display: flex; align-items: center; gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
-.avdot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--green);
+.avDot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #16a34a;
   animation: pulse 1.5s ease infinite;
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
 }
 
+/* ── Name ── */
 .name {
   font-family: var(--font-h);
-  font-size: clamp(48px, 8.5vw, 130px);
+  font-size: clamp(44px, 8.5vw, 128px);
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 0.92;
-  color: var(--ink);
+  line-height: 0.94;
+  color: var(--text-p);
   white-space: nowrap;
 }
 
-.roles {
-  display: flex; gap: 10px; flex-wrap: wrap;
-  margin-top: 18px;
-}
+/* ── Role tags ── */
+.roles { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
 .roleTag {
-  font-family: var(--font-m);
-  font-size: 11px; letter-spacing: 0.09em;
-  padding: 7px 16px; border-radius: 40px;
-  transition: all 0.25s;
+  font-family: var(--font-b);
+  font-size: 13px; font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--r2);
+  border: 1.5px solid;
+  transition: all 0.18s;
 }
 
-/* ── Tech icons row ── */
+/* ── Tech icons ── */
 .techRow {
-  display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap;
-  margin-top: 22px;
+  display: flex; align-items: flex-end; gap: 10px;
+  flex-wrap: wrap; margin-top: 20px;
 }
 .techIcon {
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
   cursor: default;
 }
-.techIconInner {
-  width: 36px; height: 36px;
-  padding: 6px;
-  background: rgba(255,255,255,0.72);
-  border: 1px solid rgba(24,19,15,0.1);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(24,19,15,0.07);
+.techInner {
+  width: 36px; height: 36px; padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  box-shadow: var(--e1);
   display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(6px);
-  transition: box-shadow 0.25s, border-color 0.25s;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
 }
-.techIcon:hover .techIconInner {
-  box-shadow: 0 6px 20px rgba(24,19,15,0.14);
-  border-color: rgba(24,19,15,0.18);
+.techIcon:hover .techInner {
+  box-shadow: var(--e2);
+  border-color: rgba(91,14,20,0.3);
+  transform: translateY(-2px);
 }
-.techIconLabel {
+.techLabel {
   font-family: var(--font-m);
-  font-size: 8.5px; letter-spacing: 0.06em;
-  color: var(--muted2); text-align: center;
+  font-size: 8px; letter-spacing: 0.06em;
+  color: var(--text-d);
 }
 
-/* ── Meta ── */
-.meta { margin-top: 32px; }
+/* ── Meta grid ── */
+.meta { margin-top: 28px; }
 .metaGrid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--border2);
-  border-bottom: 1px solid var(--border2);
+  display: grid; grid-template-columns: repeat(3,1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 .metaCell {
-  padding: 14px 0;
-  border-right: 1px solid var(--border2);
-  padding-right: 24px;
+  padding: 12px 0;
+  border-right: 1px solid var(--border);
+  padding-right: 20px;
 }
-.metaCell:not(:first-child) { padding-left: 24px; }
+.metaCell:not(:first-child) { padding-left: 20px; }
 .metaCell:last-child { border-right: none; }
 .metaL {
   font-family: var(--font-m);
-  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--muted2); margin-bottom: 4px;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-d); margin-bottom: 3px;
 }
-.metaV { font-size: 13px; font-weight: 600; color: var(--ink); }
+.metaV { font-size: 13px; font-weight: 600; color: var(--text-p); }
 
 /* ── CTAs ── */
-.ctas { display: flex; gap: 12px; margin-top: 20px; }
-.btnP {
-  font-family: var(--font-m);
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 12px 26px;
-  background: var(--blue); color: #fff;
-  border-radius: 40px; font-weight: 500;
-  display: inline-flex; align-items: center; gap: 8px;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 16px rgba(29,78,216,0.22);
-}
-.btnP:hover { background: var(--blue2); box-shadow: 0 4px 24px rgba(29,78,216,0.35); }
-.btnO {
-  font-family: var(--font-m);
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 12px 26px;
-  border: 1.5px solid var(--border2); color: var(--muted);
-  border-radius: 40px;
-  transition: border-color 0.2s, color 0.2s;
-}
-.btnO:hover { border-color: var(--blue); color: var(--blue); }
+.ctas { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.btn { min-width: 0; }
 
-/* ── Scroll ── */
-.scroll {
-  position: absolute; bottom: 36px; right: 72px; z-index: 4;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+/* ── Scroll hint ── */
+.scrollHint {
+  position: absolute; bottom: 32px; right: 48px; z-index: 4;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
 }
 .scrollTxt {
   font-family: var(--font-m);
-  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--muted2); writing-mode: vertical-rl;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-d); writing-mode: vertical-rl;
 }
 .scrollLine {
-  width: 1px; height: 42px;
-  background: linear-gradient(to bottom, var(--blue), transparent);
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--primary), transparent);
   animation: scrollAnim 2s ease infinite;
 }
-@keyframes scrollAnim { 0%,100%{height:16px;opacity:.4} 50%{height:42px;opacity:1} }
-
-/* ── Animations ── */
+@keyframes scrollAnim { 0%,100%{height:14px;opacity:.4} 50%{height:40px;opacity:1} }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
 /* ── Responsive ── */
-@media (max-width: 1024px) { .badge { display: none; } }
-@media (max-width: 768px) {
-  .hero { padding: 0 24px 48px; }
-  .metaGrid { grid-template-columns: 1fr; }
-  .metaCell { border-right: none; border-bottom: 1px solid var(--border2); padding: 12px 0; }
-  .metaCell:last-child { border-bottom: none; }
-  .techRow { gap: 10px; }
-  .techIconInner { width: 30px; height: 30px; }
-  .scroll { right: 24px; }
+@media (max-width:1024px) { .chip { display:none; } }
+@media (max-width:768px) {
+  .hero { padding:0 24px 48px; }
+  .name { font-size:clamp(36px,10vw,68px); white-space:normal; }
+  .metaGrid { grid-template-columns:1fr; }
+  .metaCell { border-right:none; border-bottom:1px solid var(--border); padding:10px 0; }
+  .metaCell:last-child { border-bottom:none; }
+  .scrollHint { right:24px; }
+  .techRow { gap:8px; }
+  .techInner { width:32px; height:32px; }
+}
+@media (max-width:480px) {
+  .hero { padding:0 16px 40px; }
+  .ctas { flex-direction:column; }
+  .ctas a { width:100%; justify-content:center; }
+  .techInner { width:30px; height:30px; padding:5px; }
 }
